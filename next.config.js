@@ -17,7 +17,8 @@ const nextConfig = {
     unoptimized: true, // Required for static export
   },
   // Set the base path if deploying to a subdirectory
-  // basePath: '/blog',
+  basePath: '/rand-blog',
+  assetPrefix: '/rand-blog/',
 };
 
 // Merge MDX config with Next.js config
