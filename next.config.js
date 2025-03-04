@@ -6,6 +6,23 @@ const withMDX = require('@next/mdx')({
   },
 });
 
+const isGithubActions = process.env.GITHUB_ACTIONS || false;
+
+let assetPrefix = '';
+let basePath = '';
+
+if (isGithubActions) {
+  // trim off `<owner>/`
+  const repo = process.env.GITHUB_REPOSITORY.replace(/.*?\//, '');
+  
+  assetPrefix = `/${repo}/`;
+  basePath = `/${repo}`;
+} else {
+  // For local development, use the default values
+  assetPrefix = '/rand-blog/';
+  basePath = '/rand-blog';
+}
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // Configure pageExtensions to include md and mdx
@@ -18,8 +35,17 @@ const nextConfig = {
   },
   // Set the base path for GitHub Pages deployment
   // The basePath should match your repository name
-  basePath: '/rand-blog',
-  assetPrefix: '/rand-blog/',
+  basePath: basePath,
+  assetPrefix: assetPrefix,
+  // Add a custom webpack config to handle the .nojekyll file
+  webpack: (config, { isServer }) => {
+    // Only run this on the client-side build
+    if (!isServer) {
+      // Create .nojekyll file to prevent GitHub Pages from using Jekyll
+      require('fs').writeFileSync('./out/.nojekyll', '');
+    }
+    return config;
+  },
 };
 
 // Merge MDX config with Next.js config
