@@ -38,6 +38,9 @@ const nextConfig = {
   // or be empty for local development
   basePath: basePath,
   assetPrefix: assetPrefix,
+  
+  // Add trailingSlash for better compatibility with static exports
+  trailingSlash: true,
 };
 
 // Merge MDX config with Next.js config
