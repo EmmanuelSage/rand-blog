@@ -16,10 +16,10 @@ const nextConfig = {
   images: {
     unoptimized: true, // Required for static export
   },
-  // Set the base path if deploying to a subdirectory
-  // basePath: '/rand-blog',
-  // assetPrefix: '/rand-blog/',
-  assetPrefix: './',
+  // Set the base path for GitHub Pages deployment
+  // The basePath should match your repository name
+  basePath: '/blog',
+  assetPrefix: '/blog/',
 };
 
 // Merge MDX config with Next.js config
