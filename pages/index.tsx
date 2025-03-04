@@ -37,6 +37,9 @@ export default function Home({ posts }: HomeProps) {
       const { search } = router.query;
       if (search && typeof search === 'string') {
         setSearchQuery(search);
+      } else if (router.isReady && !search && searchQuery) {
+        // Clear search if URL doesn't have search parameter but state does
+        setSearchQuery('');
       }
     }
   }, [router.isReady, router.query]);
@@ -51,7 +54,7 @@ export default function Home({ posts }: HomeProps) {
       return (
         title.toLowerCase().includes(lowerCaseQuery) ||
         description.toLowerCase().includes(lowerCaseQuery) ||
-        tags.some((tag: string) => tag.toLowerCase().includes(lowerCaseQuery))
+        (tags && tags.some((tag: string) => tag.toLowerCase().includes(lowerCaseQuery)))
       );
     });
   }, [posts, searchQuery]);
@@ -76,25 +79,38 @@ export default function Home({ posts }: HomeProps) {
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     
-    // Update URL with search query
+    // Update URL with search query - don't use shallow routing
     if (query.trim()) {
-      router.push(`/?search=${encodeURIComponent(query.trim())}`, undefined, { shallow: true });
-    } else {
-      router.push('/', undefined, { shallow: true });
+      router.push(`/?search=${encodeURIComponent(query.trim())}`);
+    } else if (router.query.search) {
+      // Only update URL if there was a search parameter before
+      router.push('/');
     }
+  };
+  
+  // Handle post click to ensure proper navigation
+  const handlePostClick = (e: React.MouseEvent<HTMLAnchorElement>, slug: string) => {
+    e.preventDefault();
+    router.push(`/posts/${slug}`);
   };
   
   return (
     <Layout>
       <Helmet>
-        <title>My Personal Blog</title>
-        <meta name="description" content="Welcome to my personal blog where I share my thoughts and experiences." />
+        <title>{searchQuery ? `Search: ${searchQuery} - My Personal Blog` : 'My Personal Blog'}</title>
+        <meta 
+          name="description" 
+          content={searchQuery 
+            ? `Search results for "${searchQuery}" on my personal blog.` 
+            : "Welcome to my personal blog where I share my thoughts and experiences."
+          } 
+        />
       </Helmet>
       
       <div className="container py-10">
         <h1 className="text-4xl font-bold mb-8">My Blog</h1>
         
-        <SearchBar onSearch={handleSearch} />
+        <SearchBar onSearch={handleSearch} initialValue={searchQuery} />
         
         {filteredPosts.length === 0 ? (
           <div className="text-center py-10">
@@ -106,9 +122,13 @@ export default function Home({ posts }: HomeProps) {
             <div className="grid gap-6">
               {currentPosts.map((post) => (
                 <article key={post.slug} className="bg-white p-6 rounded-lg shadow-md">
-                  <Link href={`/posts/${post.slug}`} className="no-underline">
+                  <a 
+                    href={`/posts/${post.slug}`}
+                    onClick={(e) => handlePostClick(e, post.slug)}
+                    className="no-underline"
+                  >
                     <h2 className="text-2xl font-bold mb-2 text-blue-600 hover:text-blue-800">{post.frontMatter.title}</h2>
-                  </Link>
+                  </a>
                   <time className="text-sm text-gray-500 mb-3 block">
                     {format(new Date(post.frontMatter.date), 'MMMM d, yyyy')}
                   </time>
@@ -125,9 +145,13 @@ export default function Home({ posts }: HomeProps) {
                   )}
                   
                   <div className="mt-4">
-                    <Link href={`/posts/${post.slug}`} className="text-blue-600 hover:text-blue-800">
+                    <a 
+                      href={`/posts/${post.slug}`}
+                      onClick={(e) => handlePostClick(e, post.slug)}
+                      className="text-blue-600 hover:text-blue-800"
+                    >
                       Read more →
-                    </Link>
+                    </a>
                   </div>
                 </article>
               ))}
