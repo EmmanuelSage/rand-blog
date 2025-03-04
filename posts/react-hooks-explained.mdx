@@ -1,0 +1,138 @@
+---
+title: 'React Hooks Explained'
+date: '2023-08-20'
+description: 'A comprehensive guide to React Hooks and how to use them effectively in your projects.'
+tags: ['React', 'Hooks', 'JavaScript']
+---
+
+# React Hooks Explained
+
+React Hooks were introduced in React 16.8 as a way to use state and other React features without writing a class. They allow you to "hook into" React state and lifecycle features from function components.
+
+## Why Hooks?
+
+Hooks solve several problems in React:
+
+1. **Reusing stateful logic** between components without render props or higher-order components
+2. **Splitting complex components** into smaller functions based on related pieces
+3. **Using React features without classes**, which can be confusing with `this` binding
+
+## Common Hooks
+
+### useState
+
+The `useState` hook lets you add state to functional components:
+
+```jsx
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+  
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+### useEffect
+
+The `useEffect` hook lets you perform side effects in function components:
+
+```jsx
+import React, { useState, useEffect } from 'react';
+
+function Example() {
+  const [count, setCount] = useState(0);
+
+  // Similar to componentDidMount and componentDidUpdate:
+  useEffect(() => {
+    // Update the document title using the browser API
+    document.title = `You clicked ${count} times`;
+  });
+
+  return (
+    <div>
+      <p>You clicked {count} times</p>
+      <button onClick={() => setCount(count + 1)}>
+        Click me
+      </button>
+    </div>
+  );
+}
+```
+
+### useContext
+
+The `useContext` hook lets you subscribe to React context without introducing nesting:
+
+```jsx
+import React, { useContext } from 'react';
+import { ThemeContext } from './theme-context';
+
+function ThemedButton() {
+  const theme = useContext(ThemeContext);
+  return (
+    <button style={{ background: theme.background, color: theme.foreground }}>
+      I am styled by theme context!
+    </button>
+  );
+}
+```
+
+## Test Your Knowledge
+
+Let's test your understanding of React Hooks:
+
+<Quiz 
+  question="Which of the following is NOT a built-in React Hook?"
+  options={[
+    { id: '1', text: 'useState', isCorrect: false },
+    { id: '2', text: 'useEffect', isCorrect: false },
+    { id: '3', text: 'useComponent', isCorrect: true },
+    { id: '4', text: 'useContext', isCorrect: false }
+  ]}
+  explanation="useComponent is not a built-in React Hook. The core hooks include useState, useEffect, useContext, useReducer, useCallback, useMemo, useRef, useImperativeHandle, useLayoutEffect, and useDebugValue."
+/>
+
+## Rules of Hooks
+
+There are two important rules to follow when using Hooks:
+
+1. **Only call Hooks at the top level** - Don't call Hooks inside loops, conditions, or nested functions
+2. **Only call Hooks from React function components** - Don't call Hooks from regular JavaScript functions
+
+## Custom Hooks
+
+You can create your own Hooks to reuse stateful logic between components. A custom Hook is a JavaScript function whose name starts with "use" and that may call other Hooks.
+
+Here's a simple example of a custom Hook:
+
+```jsx
+import { useState, useEffect } from 'react';
+
+function useWindowWidth() {
+  const [width, setWidth] = useState(window.innerWidth);
+  
+  useEffect(() => {
+    const handleResize = () => setWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+  
+  return width;
+}
+```
+
+## Conclusion
+
+React Hooks provide a more direct API to React concepts you already know: props, state, context, refs, and lifecycle. They make it easier to reuse stateful logic between components and make your code more readable and maintainable.
+
+Start using Hooks in your new components, and gradually migrate your existing components when it makes sense for your team. 

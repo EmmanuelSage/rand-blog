@@ -1,0 +1,149 @@
+---
+title: 'JavaScript Basics Every Developer Should Know'
+date: '2023-01-15'
+description: 'A comprehensive guide to JavaScript fundamentals that every developer should understand.'
+tags: ['JavaScript', 'Web Development', 'Programming']
+---
+
+# JavaScript Basics Every Developer Should Know
+
+JavaScript is one of the most popular programming languages in the world, powering the interactive elements of millions of websites. Whether you're just starting out or looking to refresh your knowledge, understanding these core concepts is essential.
+
+## Variables and Data Types
+
+JavaScript has several ways to declare variables:
+
+```javascript
+// Using var (older method, function-scoped)
+var name = "John";
+
+// Using let (block-scoped, can be reassigned)
+let age = 30;
+
+// Using const (block-scoped, cannot be reassigned)
+const PI = 3.14159;
+```
+
+The main data types in JavaScript include:
+
+- **Strings**: Text values like `"Hello World"`
+- **Numbers**: Both integers and floating-point numbers
+- **Booleans**: `true` or `false`
+- **Arrays**: Collections of values
+- **Objects**: Key-value pairs
+- **Null**: Intentional absence of value
+- **Undefined**: Variables that have been declared but not assigned
+
+## Functions
+
+Functions are blocks of reusable code:
+
+```javascript
+// Function declaration
+function greet(name) {
+  return `Hello, ${name}!`;
+}
+
+// Arrow function (ES6+)
+const greet = (name) => `Hello, ${name}!`;
+
+// Function expression
+const greet = function(name) {
+  return `Hello, ${name}!`;
+};
+```
+
+## Control Flow
+
+JavaScript provides several structures for controlling the flow of execution:
+
+```javascript
+// If statements
+if (age >= 18) {
+  console.log("You are an adult");
+} else {
+  console.log("You are a minor");
+}
+
+// For loops
+for (let i = 0; i < 5; i++) {
+  console.log(i);
+}
+
+// While loops
+let i = 0;
+while (i < 5) {
+  console.log(i);
+  i++;
+}
+```
+
+## Working with Arrays
+
+Arrays are versatile data structures in JavaScript:
+
+```javascript
+// Creating an array
+const fruits = ["Apple", "Banana", "Orange"];
+
+// Accessing elements
+console.log(fruits[0]); // "Apple"
+
+// Array methods
+fruits.push("Mango"); // Add to end
+fruits.pop(); // Remove from end
+fruits.unshift("Strawberry"); // Add to beginning
+fruits.shift(); // Remove from beginning
+
+// Iterating over arrays
+fruits.forEach(fruit => console.log(fruit));
+
+// Transforming arrays
+const upperFruits = fruits.map(fruit => fruit.toUpperCase());
+```
+
+## Understanding the DOM
+
+The Document Object Model (DOM) is a programming interface for web documents:
+
+```javascript
+// Selecting elements
+const element = document.getElementById("myElement");
+const elements = document.querySelectorAll(".myClass");
+
+// Modifying elements
+element.textContent = "New text";
+element.style.color = "red";
+
+// Event handling
+element.addEventListener("click", function() {
+  console.log("Element clicked!");
+});
+```
+
+## Asynchronous JavaScript
+
+JavaScript handles asynchronous operations through callbacks, promises, and async/await:
+
+```javascript
+// Promises
+fetch("https://api.example.com/data")
+  .then(response => response.json())
+  .then(data => console.log(data))
+  .catch(error => console.error(error));
+
+// Async/await
+async function fetchData() {
+  try {
+    const response = await fetch("https://api.example.com/data");
+    const data = await response.json();
+    console.log(data);
+  } catch (error) {
+    console.error(error);
+  }
+}
+```
+
+## Conclusion
+
+These JavaScript basics form the foundation of web development. By mastering these concepts, you'll be well on your way to becoming a proficient JavaScript developer. Remember that practice is key—try to implement these concepts in small projects to reinforce your learning. 

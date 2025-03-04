@@ -1,0 +1,90 @@
+---
+title: 'Getting Started with MDX in Next.js'
+date: '2023-08-15'
+description: 'Learn how to use MDX to create interactive blog posts with embedded React components.'
+tags: ['MDX', 'Next.js', 'React']
+---
+
+# Getting Started with MDX in Next.js
+
+MDX is a powerful format that lets you write JSX in your markdown documents. You can import components, such as interactive UI components, charts, or anything else you can build with React, and embed them within your content.
+
+## What is MDX?
+
+MDX is markdown for the component era. It lets you write JSX embedded inside markdown. This is useful when you want to include interactive components within your content.
+
+Here's a simple example of MDX syntax:
+
+```jsx
+# Hello, MDX!
+
+This is some **bold** text.
+
+<Button onClick={() => alert('Hello')}>Click me</Button>
+```
+
+## Using Components in MDX
+
+One of the great features of MDX is the ability to use React components directly in your markdown. Let's try out our Quiz component:
+
+<Quiz 
+  question="What does MDX stand for?"
+  options={[
+    { id: '1', text: 'Markdown X', isCorrect: false },
+    { id: '2', text: 'Markdown Extended', isCorrect: false },
+    { id: '3', text: 'Markdown with JSX', isCorrect: true },
+    { id: '4', text: 'Markdown XML', isCorrect: false }
+  ]}
+  explanation="MDX stands for Markdown with JSX, allowing you to use JSX components in your markdown content."
+/>
+
+## Code Syntax Highlighting
+
+MDX also supports code syntax highlighting. Here's an example of a React component:
+
+```jsx
+import React from 'react';
+
+function HelloWorld() {
+  return (
+    <div>
+      <h1>Hello, World!</h1>
+      <p>Welcome to my MDX blog!</p>
+    </div>
+  );
+}
+
+export default HelloWorld;
+```
+
+And here's some CSS:
+
+```css
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.title {
+  color: #3b82f6;
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+```
+
+## Frontmatter
+
+MDX files can include frontmatter, which is YAML at the top of the file that contains metadata about the post. This blog uses frontmatter for:
+
+- Title
+- Date
+- Description
+- Tags
+- And any other metadata you want to include
+
+## Conclusion
+
+MDX is a powerful tool for creating interactive blog posts. By combining the simplicity of markdown with the power of React components, you can create rich, interactive content that engages your readers.
+
+Try creating your own MDX blog post and experiment with embedding different components! 

@@ -1,0 +1,262 @@
+---
+title: 'Introduction to TypeScript'
+date: '2023-03-10'
+description: 'Learn the basics of TypeScript and how it enhances JavaScript development.'
+tags: ['TypeScript', 'JavaScript', 'Programming']
+---
+
+# Introduction to TypeScript
+
+TypeScript is a strongly typed programming language that builds on JavaScript, giving you better tooling at any scale. It adds static type definitions to JavaScript, helping catch errors early and making your code more robust.
+
+## Why Use TypeScript?
+
+TypeScript offers several advantages over plain JavaScript:
+
+1. **Static Type Checking**: Catch type-related errors at compile time rather than runtime
+2. **Enhanced IDE Support**: Better autocompletion, navigation, and refactoring tools
+3. **Improved Readability**: Types serve as documentation
+4. **Safer Refactoring**: The compiler catches errors when you change your code
+5. **Modern JavaScript Features**: Use the latest ECMAScript features with backward compatibility
+
+## Getting Started
+
+To start using TypeScript, you'll need to install it first:
+
+```bash
+# Using npm
+npm install -g typescript
+
+# Using yarn
+yarn global add typescript
+```
+
+Create a simple TypeScript file (e.g., `hello.ts`):
+
+```typescript
+function greet(name: string): string {
+  return `Hello, ${name}!`;
+}
+
+console.log(greet("TypeScript"));
+```
+
+Compile it to JavaScript:
+
+```bash
+tsc hello.ts
+```
+
+This will generate a `hello.js` file that you can run with Node.js.
+
+## Basic Types
+
+TypeScript supports several basic types:
+
+```typescript
+// Boolean
+let isDone: boolean = false;
+
+// Number
+let decimal: number = 6;
+let hex: number = 0xf00d;
+let binary: number = 0b1010;
+
+// String
+let color: string = "blue";
+let greeting: string = `Hello, ${name}`;
+
+// Array
+let list: number[] = [1, 2, 3];
+let fruits: Array<string> = ["apple", "banana", "orange"];
+
+// Tuple
+let person: [string, number] = ["Alice", 30];
+
+// Enum
+enum Color {Red, Green, Blue}
+let c: Color = Color.Green;
+
+// Any
+let notSure: any = 4;
+notSure = "maybe a string";
+
+// Void
+function logMessage(message: string): void {
+  console.log(message);
+}
+
+// Null and Undefined
+let u: undefined = undefined;
+let n: null = null;
+
+// Never
+function error(message: string): never {
+  throw new Error(message);
+}
+```
+
+## Interfaces
+
+Interfaces define the structure of objects:
+
+```typescript
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  age?: number; // Optional property
+  readonly createdAt: Date; // Read-only property
+}
+
+function createUser(user: User): User {
+  return user;
+}
+
+const newUser = createUser({
+  id: 1,
+  name: "John Doe",
+  email: "john@example.com",
+  createdAt: new Date()
+});
+```
+
+## Classes
+
+TypeScript supports class-based object-oriented programming:
+
+```typescript
+class Person {
+  // Properties
+  private name: string;
+  protected age: number;
+  
+  // Constructor
+  constructor(name: string, age: number) {
+    this.name = name;
+    this.age = age;
+  }
+  
+  // Methods
+  public greet(): string {
+    return `Hello, my name is ${this.name} and I am ${this.age} years old.`;
+  }
+}
+
+// Inheritance
+class Employee extends Person {
+  private department: string;
+  
+  constructor(name: string, age: number, department: string) {
+    super(name, age);
+    this.department = department;
+  }
+  
+  public getDetails(): string {
+    return `${this.greet()} I work in the ${this.department} department.`;
+  }
+}
+
+const employee = new Employee("Alice", 30, "Engineering");
+console.log(employee.getDetails());
+```
+
+## Generics
+
+Generics allow you to create reusable components:
+
+```typescript
+function identity<T>(arg: T): T {
+  return arg;
+}
+
+let output1 = identity<string>("myString");
+let output2 = identity<number>(100);
+
+// Generic interface
+interface GenericResponse<T> {
+  data: T;
+  status: number;
+  message: string;
+}
+
+// Using the generic interface
+const userResponse: GenericResponse<User> = {
+  data: newUser,
+  status: 200,
+  message: "Success"
+};
+```
+
+## Type Assertions
+
+Type assertions are a way to tell the compiler "trust me, I know what I'm doing":
+
+```typescript
+// Using angle-bracket syntax
+let someValue: any = "this is a string";
+let strLength: number = (<string>someValue).length;
+
+// Using as syntax (preferred in JSX)
+let otherValue: any = "another string";
+let otherLength: number = (otherValue as string).length;
+```
+
+## Advanced Types
+
+TypeScript offers advanced type features:
+
+```typescript
+// Union types
+function formatValue(value: string | number): string {
+  if (typeof value === "string") {
+    return value.trim();
+  }
+  return value.toString();
+}
+
+// Intersection types
+interface HasName {
+  name: string;
+}
+
+interface HasAge {
+  age: number;
+}
+
+type Person = HasName & HasAge;
+
+// Type aliases
+type ID = string | number;
+type UserWithID = User & { id: ID };
+
+// Literal types
+type Direction = "north" | "south" | "east" | "west";
+function move(direction: Direction) {
+  // ...
+}
+```
+
+## Configuration with tsconfig.json
+
+Create a `tsconfig.json` file to configure TypeScript:
+
+```json
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist"
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules"]
+}
+```
+
+## Conclusion
+
+TypeScript enhances JavaScript development by adding static types and modern language features. It helps catch errors early, improves code quality, and provides better tooling support. As your projects grow in size and complexity, TypeScript becomes increasingly valuable for maintaining code quality and developer productivity. 
