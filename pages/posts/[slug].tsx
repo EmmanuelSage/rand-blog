@@ -9,6 +9,7 @@ import { format } from 'date-fns';
 import Layout from '@/layouts/Layout';
 import { Quiz } from '@/components/Quiz';
 import { CodeBlock } from '@/components/CodeBlock';
+import Link from 'next/link';
 
 // Custom components available in MDX
 const components = {
@@ -28,9 +29,21 @@ interface PostPageProps {
   };
   slug: string;
   mdxSource: MDXRemoteSerializeResult;
+  nextPost: {
+    slug: string;
+    frontMatter: {
+      title: string;
+    };
+  } | null;
+  prevPost: {
+    slug: string;
+    frontMatter: {
+      title: string;
+    };
+  } | null;
 }
 
-export default function PostPage({ frontMatter, slug, mdxSource }: PostPageProps) {
+export default function PostPage({ frontMatter, slug, mdxSource, nextPost, prevPost }: PostPageProps) {
   return (
     <Layout>
       <Helmet>
@@ -70,6 +83,29 @@ export default function PostPage({ frontMatter, slug, mdxSource }: PostPageProps
         <div className="prose">
           <MDXRemote {...mdxSource} components={components} />
         </div>
+        
+        {/* Post Navigation */}
+        <div className="mt-12 pt-6 border-t border-gray-200">
+          <div className="flex flex-col sm:flex-row justify-between">
+            {prevPost && (
+              <Link href={`/posts/${prevPost.slug}`} className="group mb-4 sm:mb-0">
+                <div className="text-sm text-gray-500">Previous Post</div>
+                <div className="text-lg font-medium text-blue-600 group-hover:text-blue-800">
+                  ← {prevPost.frontMatter.title}
+                </div>
+              </Link>
+            )}
+            
+            {nextPost && (
+              <Link href={`/posts/${nextPost.slug}`} className="group text-right">
+                <div className="text-sm text-gray-500">Next Post</div>
+                <div className="text-lg font-medium text-blue-600 group-hover:text-blue-800">
+                  {nextPost.frontMatter.title} →
+                </div>
+              </Link>
+            )}
+          </div>
+        </div>
       </article>
     </Layout>
   );
@@ -103,6 +139,32 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   // Parse the front matter and content
   const { data, content } = matter(fileContents);
   
+  // Get all posts for navigation
+  const postsDirectory = path.join(process.cwd(), 'posts');
+  const filenames = fs.readdirSync(postsDirectory);
+  
+  // Get all posts data
+  const allPosts = filenames
+    .filter((filename) => filename.endsWith('.mdx'))
+    .map((filename) => {
+      const postFilePath = path.join(postsDirectory, filename);
+      const postFileContents = fs.readFileSync(postFilePath, 'utf8');
+      const { data } = matter(postFileContents);
+      return {
+        slug: filename.replace(/\.mdx$/, ''),
+        frontMatter: data,
+      };
+    })
+    // Sort posts by date in descending order
+    .sort((a, b) => new Date(b.frontMatter.date).getTime() - new Date(a.frontMatter.date).getTime());
+  
+  // Find current post index
+  const currentPostIndex = allPosts.findIndex((post) => post.slug === slug);
+  
+  // Get next and previous posts
+  const nextPost = currentPostIndex > 0 ? allPosts[currentPostIndex - 1] : null;
+  const prevPost = currentPostIndex < allPosts.length - 1 ? allPosts[currentPostIndex + 1] : null;
+  
   // Dynamically import remark-gfm
   const remarkGfm = await import('remark-gfm');
   
@@ -120,6 +182,8 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
       frontMatter: data,
       slug,
       mdxSource,
+      nextPost,
+      prevPost,
     },
   };
 }; 

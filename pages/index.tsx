@@ -6,6 +6,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { format } from 'date-fns';
 import Layout from '@/layouts/Layout';
+import { useState } from 'react';
 
 interface Post {
   slug: string;
@@ -23,6 +24,20 @@ interface HomeProps {
 }
 
 export default function Home({ posts }: HomeProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+  const postsPerPage = 5;
+  
+  // Calculate total pages
+  const totalPages = Math.ceil(posts.length / postsPerPage);
+  
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = posts.slice(indexOfFirstPost, indexOfLastPost);
+  
+  // Change page
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+  
   return (
     <Layout>
       <Helmet>
@@ -34,7 +49,7 @@ export default function Home({ posts }: HomeProps) {
         <h1 className="text-4xl font-bold mb-8">My Blog</h1>
         
         <div className="grid gap-6">
-          {posts.map((post) => (
+          {currentPosts.map((post) => (
             <article key={post.slug} className="bg-white p-6 rounded-lg shadow-md">
               <Link href={`/posts/${post.slug}`} className="no-underline">
                 <h2 className="text-2xl font-bold mb-2 text-blue-600 hover:text-blue-800">{post.frontMatter.title}</h2>
@@ -62,6 +77,51 @@ export default function Home({ posts }: HomeProps) {
             </article>
           ))}
         </div>
+        
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center mt-10">
+            <nav className="flex items-center">
+              <button 
+                onClick={() => paginate(currentPage - 1)}
+                disabled={currentPage === 1}
+                className={`px-4 py-2 mx-1 rounded ${
+                  currentPage === 1 
+                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed' 
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                }`}
+              >
+                Previous
+              </button>
+              
+              {Array.from({ length: totalPages }).map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => paginate(index + 1)}
+                  className={`px-4 py-2 mx-1 rounded ${
+                    currentPage === index + 1
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-gray-200 hover:bg-gray-300'
+                  }`}
+                >
+                  {index + 1}
+                </button>
+              ))}
+              
+              <button
+                onClick={() => paginate(currentPage + 1)}
+                disabled={currentPage === totalPages}
+                className={`px-4 py-2 mx-1 rounded ${
+                  currentPage === totalPages
+                    ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                    : 'bg-blue-500 text-white hover:bg-blue-600'
+                }`}
+              >
+                Next
+              </button>
+            </nav>
+          </div>
+        )}
       </div>
     </Layout>
   );

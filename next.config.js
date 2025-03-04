@@ -18,9 +18,9 @@ if (isGithubActions) {
   assetPrefix = `/${repo}/`;
   basePath = `/${repo}`;
 } else {
-  // For local development, use the default values
-  assetPrefix = '/rand-blog/';
-  basePath = '/rand-blog';
+  // For local development, use empty paths (root of the domain)
+  assetPrefix = '';
+  basePath = '';
 }
 
 /** @type {import('next').NextConfig} */
@@ -34,7 +34,8 @@ const nextConfig = {
     unoptimized: true, // Required for static export
   },
   // Set the base path for GitHub Pages deployment
-  // The basePath should match your repository name
+  // The basePath should match your repository name for GitHub Pages
+  // or be empty for local development
   basePath: basePath,
   assetPrefix: assetPrefix,
 };
