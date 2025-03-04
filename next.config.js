@@ -37,15 +37,6 @@ const nextConfig = {
   // The basePath should match your repository name
   basePath: basePath,
   assetPrefix: assetPrefix,
-  // Add a custom webpack config to handle the .nojekyll file
-  webpack: (config, { isServer }) => {
-    // Only run this on the client-side build
-    if (!isServer) {
-      // Create .nojekyll file to prevent GitHub Pages from using Jekyll
-      require('fs').writeFileSync('./out/.nojekyll', '');
-    }
-    return config;
-  },
 };
 
 // Merge MDX config with Next.js config
