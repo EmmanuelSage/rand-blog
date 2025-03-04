@@ -21,16 +21,20 @@ export const CodeBlock: React.FC<CodeBlockProps> = ({ children, className }) => 
     >
       {({ className, style, tokens, getLineProps, getTokenProps }) => (
         <pre className={className} style={{ ...style, padding: '1rem', borderRadius: '0.5rem', overflow: 'auto' }}>
-          {tokens.map((line, i) => (
-            <div key={i} {...getLineProps({ line, key: i })}>
-              <span className="line-number" style={{ display: 'inline-block', width: '2em', userSelect: 'none', opacity: 0.5 }}>
-                {i + 1}
-              </span>
-              {line.map((token, key) => (
-                <span key={key} {...getTokenProps({ token, key })} />
-              ))}
-            </div>
-          ))}
+          {tokens.map((line, i) => {
+            const lineProps = getLineProps({ line });
+            return (
+              <div key={i} {...lineProps}>
+                <span className="line-number" style={{ display: 'inline-block', width: '2em', userSelect: 'none', opacity: 0.5 }}>
+                  {i + 1}
+                </span>
+                {line.map((token, key) => {
+                  const tokenProps = getTokenProps({ token });
+                  return <span key={key} {...tokenProps} />;
+                })}
+              </div>
+            );
+          })}
         </pre>
       )}
     </Highlight>
