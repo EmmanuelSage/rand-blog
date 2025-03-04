@@ -19,6 +19,7 @@ const nextConfig = {
   // Set the base path if deploying to a subdirectory
   // basePath: '/rand-blog',
   // assetPrefix: '/rand-blog/',
+  assetPrefix: './',
 };
 
 // Merge MDX config with Next.js config
