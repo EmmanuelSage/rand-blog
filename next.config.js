@@ -18,8 +18,8 @@ const nextConfig = {
   },
   // Set the base path for GitHub Pages deployment
   // The basePath should match your repository name
-  basePath: '/blog',
-  assetPrefix: '/blog/',
+  basePath: '/rand-blog',
+  assetPrefix: '/rand-blog/',
 };
 
 // Merge MDX config with Next.js config
